@@ -1,10 +1,16 @@
 import { Ingredient } from '../shared/ingredient.model';
 import { Injectable, EventEmitter } from '@angular/core';
 import {Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as shoppingListActions from '../shopping-list/store/shopping-list,actions';
 
 @Injectable()
 export class ShoppingService{
    
+  constructor(private store:Store<{ingredients:Ingredient[]}>){
+
+  }
+
   ingredientchanged=new Subject<Ingredient[]>();
   shoppingListEditSubject=new Subject<number>();
     private ingredients: Ingredient[]=[
@@ -28,9 +34,11 @@ export class ShoppingService{
 
       addIngredients(ingredients:Ingredient[]){
         console.log("Multiple ingredints added")
-         this.ingredients.push(... ingredients);
+/*          this.ingredients.push(... ingredients);
           this.ingredientchanged.next(this.ingredients.slice());
-      }
+ */
+        this.store.dispatch(new shoppingListActions.AddIngredients(ingredients));
+  }
 
       updateIngredient(index:number,editedIngredient:Ingredient){
         
